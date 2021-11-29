@@ -1,45 +1,34 @@
 #include <iostream>
 
+
 int main() {
 
-    int temp;
-    int answer;
-    int cycles = 0;
+    int sum = 0;
+    int count = 15;
+    int countSum = 0;
 
-    int numbers[15] = {114, 111, 106, 107, 108, 105, 115, 108, 110, 109, 112, 113, 116, 117, 118};
-    //int numbers[15] = {6546, 6435, 4324, 4222, 2152, 953, 1232, 956, 546, 432, 212, 65, 113, 65, 33};
+    int numbers[] = {114, 111, 106, 107, 108, 105, 115, 108, 110, 109, 112, 113, 116, 117, 118};
 
-    bool found = false;
-    bool inOrder = true;
+    int min = numbers[0];
+    int max = numbers[0];
 
-    for (int i = 0; !found; ++i) {
-
-        if (i == 15) {
-            i = 0;
-            cycles++;
-            std::cout << "Full cycles: " << cycles << std::endl;
-            if (inOrder) return 0;
-            else inOrder = true;
-        }
-
-        if (i + 1 < 15 && numbers[i+1] == numbers[i]) {
-            answer = numbers[i];
-            found = true;
-        }
-
-        if (i + 1 < 15 && numbers[i+1] < numbers[i]) {
-            if (cycles > 0) {
-                temp = numbers[i];
-                numbers[i] = numbers[i + 1];
-                numbers[i + 1] = temp;
-            }
-            inOrder = false;
-        }
-
-        std::cout << i << ": " << numbers[i] << std::endl;
-
+    for (int i = 0; i < count; ++i) {
+        if (min > numbers[i]) min = numbers[i];
+        if (max < numbers[i]) max = numbers[i];
+        sum += numbers[i];
+        countSum += i;
     }
 
-    std::cout << "Repeating number: " << answer << std::endl;
+    if (sum - (min * count) != countSum) {
+
+        int sequenceSum = 0;
+        for (int i = min; i <= max; i++) {
+            sequenceSum += i;
+        }
+
+        int answer = sum - sequenceSum;
+        std::cout << "Repeating number: " << answer << std::endl;
+
+    } else std::cout << "No repeating number." << std::endl;
 
 }
