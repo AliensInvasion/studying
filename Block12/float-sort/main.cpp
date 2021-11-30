@@ -1,13 +1,44 @@
 #include <iostream>
 #include <limits>
 
+void heapify(float arr[], int n, int i) {
+
+    int max = i;
+
+    int leftChild = 2*i+1;
+    int rightChild = 2*i+2;
+
+    if (leftChild < n && arr[leftChild] > arr[max]) {
+        max = leftChild;
+    }
+
+    if (rightChild < n && arr[rightChild] > arr[max]) {
+        max = rightChild;
+    }
+
+    if (i != max) {
+        std::swap(arr[i], arr[max]);
+        heapify(arr, n, max);
+    }
+
+}
+
+void heapSort(float arr[], int n) {
+
+    for (int i = n/2-1; i >= 0; --i) {
+        heapify(arr, n, i);
+    }
+
+    for (int i = n-1; i >= 0 ; --i) {
+        std::swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+
+}
+
 int main() {
 
     float max = std::numeric_limits<float>::max();
-
-    float temp;
-    int cycles = 0;
-
     float numbers[15]; // = {11.4, 11.1, 10.6, 10.7, 1.08, 1.05, 11.5, 10.8, 1.10, 1.09, 11.2, 11.3, 1.16, 1.17, 11.8};
 
     std::cout << "Enter the float numbers:" << std::endl;
@@ -21,35 +52,13 @@ int main() {
         }
     }
 
-    bool inOrder = true;
+    int n = 15;
+    heapSort(numbers, n);
 
-    for (int i = 0;; ++i) {
+    std::cout << "Sorted array:" << std::endl;
 
-        if (i == 15) {
-            i = 0;
-            cycles++;
-            std::cout << "Full cycles: " << cycles << std::endl;
-            if (inOrder) break;
-            else inOrder = true;
-        }
-
-        if (i + 1 < 15 && numbers[i+1] < numbers[i]) {
-            inOrder = false;
-            if (cycles > 0) {
-                temp = numbers[i];
-                numbers[i] = numbers[i + 1];
-                numbers[i + 1] = temp;
-            }
-        }
-
-        std::cout << i << ": " << numbers[i] << std::endl;
-
-    }
-
-    std::cout << "\n---\n" << "Row in order:" << std::endl;
-
-    for (int i = 0; i < 15 ; ++i) {
-        std::cout << i << ": " << numbers[i] << std::endl;
+    for (int i = 0; i < n; ++i) {
+        std::cout << numbers[i] << " ";
     }
 
 }
