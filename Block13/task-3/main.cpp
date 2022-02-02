@@ -3,44 +3,31 @@
 
 using namespace std;
 
-vector<int> addMore(vector<int> vec, int num) {
-
-    for (int i = 0; i < 19; ++i) {
-        vec[i] = vec[i+1];
-    }
-
-    vec[19] = num;
-    return vec;
-
-}
-
 int main() {
 
     vector<int> vec(20);
-    int num;
-    int realSize = 0;
+    int num = 0;
+    int curPos = 0;
+    bool vecFull = false;
 
+    cout << "Enter the values:" << endl;
     while (true) {
-
-        cout << "Enter the number: " << endl;
         cin >> num;
+        cin.clear();
         if (num == -1) break;
-
-        if (realSize < vec.size()) {
-            ++realSize;
-            vec[realSize-1] = num;
-        } else {
-
-            vec = addMore(vec, num);
-            //vec.erase(vec.begin());
-            //vec.push_back(num);
-
+        if (curPos == vec.size()) {
+            curPos = 0;
+            vecFull = true;
         }
-
+        vec[curPos++] = num;
     }
 
-    for (int i = 0; i < realSize; ++i) {
+    for (int i = curPos; vecFull && i < vec.size(); ++i) {
         cout << vec[i] << " ";
-    } cout << endl;
+    }
+
+    for (int i = 0; i < curPos; ++i) {
+        cout << vec[i] << " ";
+    }
 
 }
