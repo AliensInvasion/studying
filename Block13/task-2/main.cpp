@@ -10,10 +10,10 @@ int main() {
 
     float sum = 0.f;
 
-    for (int i = 0; i < toBuy.size(); ++i) {
+    for (int i : toBuy) {
 
-        if (toBuy[i] < prices.size()) {
-            sum += prices[toBuy[i]];
+        if (i < prices.size()) {
+            sum += prices[i];
         }
 
     }
