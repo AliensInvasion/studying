@@ -22,7 +22,7 @@ int main() {
     }
 
     for (auto & i : M) {
-        for (int j : i) {
+        for (int & j : i) {
             cout << j;
         }
         cout << endl;
