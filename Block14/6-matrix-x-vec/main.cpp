@@ -21,9 +21,9 @@ void showMatrix(float M[][4]) {
 }
 
 int main() {
-    
+
     float result[4];
-    
+
     cout << "Enter 4x4 matrix M:" << endl;
     float matrix[4][4];
 
@@ -35,7 +35,7 @@ int main() {
     }
 
     showMatrix(matrix);
-    
+
     cout << "\n" << "Enter 4-vector V:" << endl;
     float vec[4];
 
