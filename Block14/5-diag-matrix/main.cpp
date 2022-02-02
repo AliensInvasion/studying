@@ -9,7 +9,7 @@ int main() {
     std::cout << "Enter matrix M:" << std::endl;
 
     for (auto & i : M) {
-        for (int j : i) {
+        for (int & j : i) {
             cin >> j;
             cin.clear();
         }
