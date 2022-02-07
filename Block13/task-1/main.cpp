@@ -5,9 +5,16 @@ using namespace std;
 
 vector<int> erase(vector<int> vec, int num){
 
+    int count = 0;
+
     for (int i = 0; i < vec.size(); ++i) {
-        if (vec[i] == num) vec.erase(vec.begin() + i);
+        vec[count] = vec[i];
+        if (vec[i] == num) {
+            continue;
+        }
+        count++;
     }
+    vec.resize(count);
     return vec;
 }
 
