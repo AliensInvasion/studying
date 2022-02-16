@@ -18,23 +18,26 @@ int main() {
         cin.clear();
 
         if (num == -2) break;
-        else if (num == -1) {
-            if (vec.size() >= 5){
-                cout << "fifth element = " << vec[vec.size()-5] << endl;
-            }
-        }
-        else vec.push_back(num);
 
-        while (next) {
-            next = false;
-            for (int i = 0; i + 1 < vec.size(); ++i) {
-                if (vec[i] < vec[i+1]) {
-                    swap(vec[i], vec[i+1]);
-                    next = true;
+        else if (num == -1) {
+
+            while (next) {
+                next = false;
+                for (int i = 0; i+1 < vec.size(); ++i) {
+                    if (vec[i] < vec[i+1]) {
+                        swap(vec[i], vec[i+1]);
+                        next = true;
+                    }
                 }
             }
 
+            if (vec.size() >= 5){
+                cout << "fifth element = " << vec[vec.size()-5] << endl;
+            }
+
         }
+
+        else vec.push_back(num);
 
         next = true;
 
