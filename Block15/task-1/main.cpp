@@ -6,35 +6,33 @@ using namespace std;
 
 int main() {
 
-    int step = 1;
-    int sum = 0;
-    int temp = 0;
-    int I = 0;
-    int J = 0;
     vector<int> vec = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
 
-    while (step < vec.size()) {
+    int answer = vec[0];
+    int left = 0;
+    int right = 0;
+    int sum = 0;
+    int negative = -1;
 
-        cout << "------" << endl;
-        int i = 0;
+    for (int i = 0; i < vec.size(); ++i) {
 
-        for (int j = step; j < vec.size(); ++j, ++i) {
+        sum += vec[i];
 
-            for (int k = i; k <= j; ++k) {
-                sum += vec[k];
-            }
+        if (sum > answer) {
 
-            cout << "Range: " << j-i << " (" << i << "-" << j << ") Sum = " << sum << endl;
+            answer = sum;
+            left = negative + 1;
+            right = i;
 
-            if (sum > temp) {
-                temp = sum;
-                I = i;
-                J = j;
-            }
+        }
+
+        if (sum < 0) {
+            negative = i;
             sum = 0;
         }
-        ++step;
+
     }
-    cout << "\nMax sum = " << temp << endl;
-    cout << "i = " << I << " j = " << J << endl;
+
+    cout << "Left: " << left << " Right: " << right << " Sum: " << answer << endl;
+    
 }
