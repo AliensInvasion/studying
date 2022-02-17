@@ -7,48 +7,45 @@ using namespace std;
 int main() {
 
     int num;
+    int realSize = 0;
     bool next = true;
+    bool full = false;
 
-    vector<int> vec;
+    vector<int> vec(5);
 
     while (true) {
 
-        cout << "Enter the element:" << endl;
+        cout << "\nEnter the element:" << endl;
         cin >> num;
         cin.clear();
 
         if (num == -2) break;
 
         else if (num == -1) {
-
-            while (next) {
-                next = false;
-                for (int i = 0; i+1 < vec.size(); ++i) {
-                    if (vec[i] < vec[i+1]) {
-                        swap(vec[i], vec[i+1]);
-                        next = true;
-                    }
-                }
-            }
-
-            if (vec.size() >= 5){
-                cout << "fifth element = " << vec[vec.size()-5] << endl;
-            }
-
+            if (realSize > 0) cout << "fifth element = " << vec[0] << endl;
+            else cout << "Error. No elements in array." << endl;
         }
 
-        else vec.push_back(num);
+        else if (realSize < 5) {
+            vec[realSize++] = num;
+        }
 
+        else if (num < vec[0]) vec[0] = num;
+
+        else next = false;
+
+        while (next && num != -1) {
+            next = false;
+            bool breakFlag = false;
+            for (int i = 0; i+1 < realSize; ++i) {
+                if (vec[i] < vec[i+1]) {
+                    if (!full) next = true;
+                    breakFlag = true;
+                    swap(vec[i], vec[i+1]);
+                } else if (breakFlag) break;
+            }
+        }
+        if (realSize == 5) full = true;
         next = true;
-
-        cout << endl;
-
-        for (int i = vec.size()-1; i >= 0; --i) {
-            cout << vec[i] << " ";
-        }
-
-        cout << endl;
-
     }
-
 }
