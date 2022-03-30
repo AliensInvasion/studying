@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 bool correct (std::string str) {
 
@@ -38,8 +39,6 @@ bool correct (std::string str) {
 
 int main() {
 
-    std::string firstStr;
-    std::string secondStr;
     char sign;
     double first;
     double second;
@@ -54,20 +53,8 @@ int main() {
         std::cin >> input;
     }
 
-    bool secondStart = false;
-
-    for (char i : input) {
-        if (i == '/' || i == '*' || i == '+' || i == '-') {
-            sign = i;
-            secondStart = true;
-        }
-        else if (!secondStart) firstStr += i;
-        else secondStr += i;
-    }
-
-    first = std::stod(firstStr);
-    second = std::stod(secondStr);
-
+    std::stringstream stream(input);
+    stream >> first >> sign >> second;
 
     if (sign == '+') result = first + second;
     if (sign == '-') result = first - second;

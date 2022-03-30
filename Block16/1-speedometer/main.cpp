@@ -8,7 +8,7 @@ int main() {
     char speedometer[20];
     bool inMotion = false;
 
-    while (true) {
+    do {
         std::cout << "\nEnter speed delta:\n";
         std::cin >> delta;
         std::cin.clear();
@@ -31,8 +31,8 @@ int main() {
         std::sprintf(speedometer, "Speed: %.1fkm/h", speed);
         std::cout << speedometer << std::endl;
 
-        if (speed < .01f && inMotion) break;
+    } while (!(speed < .01f && inMotion));
 
-    }
+    std::cout << "The car stopped." << std::endl;
 
 }
