@@ -12,11 +12,11 @@ enum tone
 };
 
 void makeOutput(std::string str) {
-    for (int i = 0; i < str.length()-1; ++i) {
-        if (str[i] == ' ') {
+    for (char i : str) {
+        if (i == ' ') {
             std::cout << std::endl;
         } else {
-            int toneMask = 1 << ((int) str[i] - 49);
+            int toneMask = 1 << ((int) i - 49);
             if (toneMask & C) std::cout << "DO ";
             if (toneMask & D) std::cout << "RE ";
             if (toneMask & E) std::cout << "MI ";
