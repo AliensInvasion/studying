@@ -78,7 +78,7 @@ int main() {
                 std::cout << "GARDEN LIGHTS TURNED ON" << std::endl;
             }
 
-            if (!motionOut && (switchesStatus & GARDEN_LIGHTS)) {
+            if ((!motionOut || (time < 16 && time > 5)) && (switchesStatus & GARDEN_LIGHTS)) {
                 switchesStatus &= (~GARDEN_LIGHTS);
                 std::cout << "GARDEN LIGHTS TURNED OFF" << std::endl;
             }
