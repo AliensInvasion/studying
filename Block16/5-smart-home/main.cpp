@@ -25,7 +25,7 @@ int main() {
 
     for (int i = 0; i < 2; ++i) {
 
-        time = 0;
+        time = 15;
         colorTemperature = 5000;
 
         while (time < 24) {
@@ -43,6 +43,8 @@ int main() {
             stream << input;
             stream >> tempOut >> tempIn >> motionOut >> lightsIn;
 
+            /*
+
             std::cout << "------\n" << "TIME: " << time << ":00" << "\n------" << std::endl;
             
             std::cout << "Sensors status: " << "\n" << std::endl;
@@ -56,6 +58,7 @@ int main() {
             else std::cout << "No" << std::endl;
             if (lightsIn) std::cout << "LIGHT COLOR TEMPERATURE = " << colorTemperature << std::endl;
             std::cout << "------" << std::endl;
+             */
 
             std::cout << "Events:\n" << std::endl;
 
@@ -67,10 +70,14 @@ int main() {
                 switchesStatus &= (~HOUSE_LIGHTS);
                 std::cout << "LIGHTS INSIDE TURNED OFF" << std::endl;
             }
-            
+
             if ((time >= 16 && time <= 20) && (switchesStatus & HOUSE_LIGHTS)) {
                 colorTemperature = 5000 - ((2300 / 4) * (time - 16));
-                std::cout << "NEW LIGHT TEMPERATURE: " << colorTemperature << std::endl;
+                //std::cout << "NEW LIGHT TEMPERATURE: " << colorTemperature << std::endl;
+            }
+
+            if (switchesStatus & HOUSE_LIGHTS) {
+                std::cout << "LIGHT COLOR TEMPERATURE = " << colorTemperature << std::endl;
             }
 
             if (motionOut && !(switchesStatus & GARDEN_LIGHTS) && (time > 16 || time < 5)) {
@@ -112,6 +119,9 @@ int main() {
                 std::cout << "AIR CONDITIONER TURNED OFF" << std::endl;
             }
 
+            std::cout << std::endl;
+
+            /*
             std::cout << "------\n" << "Switches status:\n" << std::endl;
 
             if (switchesStatus & HOUSE_MAIN_POWER) std::cout << "MAIN POWER: ON" << std::endl;
@@ -135,6 +145,7 @@ int main() {
             else std::cout << "AIR CONDITIONER: OFF" << std::endl;
 
             std::cout << "------" << std::endl;
+             */
 
             ++time;
 
