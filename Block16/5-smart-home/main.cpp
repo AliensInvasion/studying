@@ -25,7 +25,7 @@ int main() {
 
     for (int i = 0; i < 2; ++i) {
 
-        time = 15;
+        time = 0;
         colorTemperature = 5000;
 
         while (time < 24) {
@@ -43,10 +43,10 @@ int main() {
             stream << input;
             stream >> tempOut >> tempIn >> motionOut >> lightsIn;
 
-            /*
+
 
             std::cout << "------\n" << "TIME: " << time << ":00" << "\n------" << std::endl;
-            
+            /*
             std::cout << "Sensors status: " << "\n" << std::endl;
             std::cout << "TEMPERATURE OUTSIDE = " << tempOut << std::endl;
             std::cout << "TEMPERATURE INSIDE = " << tempIn << std::endl;
