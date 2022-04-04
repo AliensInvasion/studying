@@ -5,7 +5,7 @@ bool substr(char *a, char *b) {
     int i = 0;
     int j = 0;
 
-    while (true) {
+    while (*(a+i) != '\0') {
         if (*(a+i) == *(b+j)) {
             if (*(b+j+1) == '\0') return true;
             ++j;
@@ -21,9 +21,9 @@ int main() {
 
     char *a = "hello world";
 
-    char *b = "ello ";
+    char *b = "world";
 
-    char *c = "word";
+    char *c = "orldw";
 
     std::cout << substr(a,b) << " " << substr(a,c);
 
