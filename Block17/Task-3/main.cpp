@@ -23,7 +23,7 @@ int main() {
 
     char *b = "ello ";
 
-    char *c = "work";
+    char *c = "word";
 
     std::cout << substr(a,b) << " " << substr(a,c);
 
