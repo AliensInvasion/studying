@@ -15,6 +15,7 @@ bool substr(char *a, char *b) {
         }
         ++i;
     }
+    return false;
 }
 
 int main() {
