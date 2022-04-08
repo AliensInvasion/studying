@@ -1,0 +1,6 @@
+lion tiger
+whale snake
+bear crocodile
+tiger wolf
+cat snake
+dog tiger
