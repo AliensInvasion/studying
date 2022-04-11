@@ -20,6 +20,7 @@ int main() {
 
     if (!file.is_open()) {
         std::cout << "Error! Destination file does not exist!";
+        return 1;
     }
 
     for (char & i : buffer) {
