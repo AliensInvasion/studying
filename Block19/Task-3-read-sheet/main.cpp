@@ -28,16 +28,18 @@ int main()
 
         sheet >> part1 >> part2 >> part3 >> part4;
 
-        name.push_back(part1);
-        surname.push_back(part2);
-        debt.push_back(part3);
-        date.push_back(part4);
+        if (part1.length() > 0) {
+            name.push_back(part1);
+            surname.push_back(part2);
+            debt.push_back(part3);
+            date.push_back(part4);
+        }
 
     }
 
     sheet.close();
 
-    for (int i = 0; i < name.size() && (name[i].length() > 0); ++i) {
+    for (int i = 0; i < name.size(); ++i) {
         sum += debt[i];
         if (debt[i] > maxDebt) {
             maxDebt = debt[i];
