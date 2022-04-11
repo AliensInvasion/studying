@@ -18,6 +18,10 @@ int main() {
 
     file.open(path, std::ios::binary);
 
+    if (!file.is_open()) {
+        std::cout << "Error! Destination file does not exist!";
+    }
+
     for (char & i : buffer) {
         file >> i;
     }

@@ -37,7 +37,7 @@ int main()
 
     sheet.close();
 
-    for (int i = 0; i < name.size(); ++i) {
+    for (int i = 0; i < name.size() && (name[i].length() > 0); ++i) {
         sum += debt[i];
         if (debt[i] > maxDebt) {
             maxDebt = debt[i];
