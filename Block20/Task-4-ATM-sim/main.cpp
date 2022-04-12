@@ -4,11 +4,11 @@
 
 void fillEmpty() {
     std::ifstream atmRead("..\\resources\\atm.bin", std::ios::binary);
-    char first;
+    char first = 0;
     if (atmRead.is_open()) {
         atmRead >> first;
         atmRead.close();
-    } else first = 0;
+    }
     if (first < 97 || first > 103) {
         std::ofstream atmWrite("..\\resources\\atm.bin", std::ios::binary);
         for (int i = 0; i < 1000; ++i) {
