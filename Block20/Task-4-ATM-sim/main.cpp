@@ -5,8 +5,10 @@
 void fillEmpty() {
     std::ifstream atmRead("..\\resources\\atm.bin", std::ios::binary);
     char first;
-    atmRead >> first;
-    atmRead.close();
+    if (atmRead.is_open()) {
+        atmRead >> first;
+        atmRead.close();
+    } else first = 0;
     if (first < 97 || first > 103) {
         std::ofstream atmWrite("..\\resources\\atm.bin", std::ios::binary);
         for (int i = 0; i < 1000; ++i) {
@@ -75,6 +77,7 @@ bool get(int &sum, char *bank){
 bool fill(){
 
     std::ifstream atmRead("..\\resources\\atm.bin", std::ios::binary);
+    if (!atmRead.is_open()) return false;
     char bank[1000];
     atmRead.read(bank, 1000);
     atmRead.close();
@@ -120,6 +123,7 @@ int main() {
     if (type == "-") {
 
         std::ifstream atmRead("..\\resources\\atm.bin", std::ios::binary);
+        if (!atmRead.is_open()) return 1;
         char bank[1000];
         atmRead.read(bank,  1000);
         atmRead.close();
