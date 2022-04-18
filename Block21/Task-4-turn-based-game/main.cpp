@@ -185,7 +185,7 @@ int game(Character *characters, std::string &field) {
                 if (!characters[i].alive) {
                     std::cout << "Enemy is dead!" << std::endl;
                     field[characters[i].position] = '.';
-                    characters[i].position = -1 * i;
+                    characters[i].position = -1;
 
                 } else {
 
@@ -206,6 +206,7 @@ int game(Character *characters, std::string &field) {
 
     std::cout << "\n------\nEnemy turn!\n------" << std::endl;
     for (int i = 1; i < 6; ++i) {
+        if (!characters[i].alive) continue;
         direction = std::rand() % 4 + 1;
         position = move(characters[i], field, direction);
         if ((characters[i].position != position) && (position > 0)) {
