@@ -52,7 +52,6 @@ struct LandPiece
     int id = -1;
     int landSize = 400;
     int buildings = 0;
-    int haveBuildingTypes = 0;
     House house;
     std::vector<Building> building;
 };
