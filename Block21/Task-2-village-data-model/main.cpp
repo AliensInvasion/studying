@@ -1,17 +1,35 @@
 #include <iostream>
 #include <vector>
 
+enum BuildingTypes
+{
+    DEFAULT_BUILDING,
+    GARAGE,
+    STORAGE,
+    BATH_HOUSE
+};
+
+enum RoomTypes
+{
+    DEFAULT_ROOM,
+    LIVING_ROOM,
+    BED_ROOM,
+    KITCHEN,
+    BATH_ROOM,
+    CHILDREN_ROOM
+};
+
 struct Building
 {
-    int type = 0;
+    BuildingTypes type = DEFAULT_BUILDING;
     int space = 0;
     int furnace = 0;
 };
 
 struct Room
 {
+    RoomTypes type = DEFAULT_ROOM;
     int space = 0;
-    int type = 0;
 };
 
 struct Floor
@@ -36,16 +54,25 @@ struct LandPiece
     int buildings = 0;
     int haveBuildingTypes = 0;
     House house;
-    Building building[3];
+    std::vector<Building> building;
 };
 
-
-int buildingTypes(int &type)
+RoomTypes roomTypes(int &type)
 {
-    if (type == 1) return 1;
-    if (type == 2) return 2;
-    if (type == 3) return 4;
-    return 0;
+    if (type == 1) return LIVING_ROOM;
+    if (type == 2) return BED_ROOM;
+    if (type == 3) return KITCHEN;
+    if (type == 4) return BATH_ROOM;
+    if (type == 5) return CHILDREN_ROOM;
+    return DEFAULT_ROOM;
+}
+
+BuildingTypes buildingTypes(int &type)
+{
+    if (type == 1) return GARAGE;
+    if (type == 2) return STORAGE;
+    if (type == 3) return BATH_HOUSE;
+    return DEFAULT_BUILDING;
 }
 
 void show(std::vector<LandPiece> &lands)
@@ -76,11 +103,11 @@ void show(std::vector<LandPiece> &lands)
                 std::cout << "\nRoom " << k+1 << ":"<< std::endl;
                 int type = i.house.floor[j].room[k].type;
                 std::string answer;
-                if (type == 0) answer = "Living-room";
-                if (type == 1) answer = "Bedroom";
-                if (type == 2) answer = "Kitchen";
-                if (type == 3) answer = "Bathroom";
-                if (type == 4) answer = "Children-room";
+                if (type == LIVING_ROOM) answer = "Living-room";
+                if (type == BED_ROOM) answer = "Bedroom";
+                if (type == KITCHEN) answer = "Kitchen";
+                if (type == BATH_ROOM) answer = "Bathroom";
+                if (type == CHILDREN_ROOM) answer = "Children-room";
                 std::cout << "Room type is " << answer << std::endl;
                 std::cout << "Room space = " << i.house.floor[j].room[k].space << std::endl;
 
@@ -92,9 +119,9 @@ void show(std::vector<LandPiece> &lands)
             std::cout << "------\nBuilding " << j+1 << ":" << std::endl;
             std::string answer;
             int type = i.building[j].type;
-            if (type == 1) answer = "Garage";
-            if (type == 2) answer = "Storage";
-            if (type == 3) answer = "Bath house";
+            if (type == GARAGE) answer = "Garage";
+            if (type == STORAGE) answer = "Storage";
+            if (type == BATH_HOUSE) answer = "Bath house";
             std::cout << "Building type is " << answer << std::endl;
             std::cout << "Space = " << i.building[j].space << std::endl;
             buildingsSpace += i.building[j].space;
@@ -151,50 +178,53 @@ int main() {
 
             for (int k = 0; k < current.house.floor[j].rooms; ++k) {
 
-                std::cout << "(Living-room is 0, bedroom is 1, kitchen is 2, bathroom is 3, children-room is 4)" << std::endl;
+                int type = 0;
+                std::cout << "(Living-room is 1, bedroom is 2, kitchen is 3, bathroom is 4, children-room is 5)" << std::endl;
                 std::cout << "Enter the type of the room " << k+1 << ":" << std::endl;
-                std::cin >> current.house.floor[j].room[k].type;
+                std::cin >> type;
 
-                while (current.house.floor[j].room[k].type > 4 || current.house.floor[j].room[k].type < 0) {
+                while (type > 5 || type < 1) {
                     std::cin.clear();
-                    std::cout << "(Living-room is 0, bedroom is 1, kitchen is 2, bathroom is 3, children-room is 4)" << std::endl;
+                    std::cout << "(Living-room is 1, bedroom is 2, kitchen is 3, bathroom is 4, children-room is 5)" << std::endl;
                     std::cout << "Enter the type of the room " << k+1 << ":" << std::endl;
-                    std::cin >> current.house.floor[j].room[k].type;
+                    std::cin >> type;
                 }
-
+                current.house.floor[j].room[k].type = roomTypes(type);
                 std::cout << "Enter the space of the room:" << std::endl;
                 std::cin >> current.house.floor[j].room[k].space;
             }
 
         }
 
-        std::cout << "Enter the number of other buildings(1-3):" << std::endl;
+        std::cout << "Enter the number of other buildings:" << std::endl;
         std::cin >> current.buildings;
-        while (current.buildings < 0 || current.buildings > 3) {
-            std::cout << "Enter the number of other buildings(1-3):" << std::endl;
+        while (current.buildings < 0) {
+            std::cout << "Enter the number of other buildings:" << std::endl;
             std::cin >> current.buildings;
         }
 
-        int type = 0;
+
         for (int j = 0; j < current.buildings; ++j) {
+
+            int type = 0;
 
             std::cout << "(Garage is 1, Storage is 2, Bath-house is 3)" << std::endl;
             std::cout << "Enter the type of building " << j+1 << ":" << std::endl;
             std::cin >> type;
 
-            while (buildingTypes(type) == 0 || (buildingTypes(type) & current.haveBuildingTypes)) {
+            while (type > 3 || type < 1) {
                 std::cin.clear();
                 std::cout << "(Garage is 1, Storage is 2, Bath-house is 3)" << std::endl;
                 std::cout << "Enter the type of building " << j+1 << ":" << std::endl;
                 std::cin >> type;
             }
 
-            current.building[j].type = type;
-            current.haveBuildingTypes |= buildingTypes(type);
+            current.building.push_back({DEFAULT_BUILDING, 0, 0});
+            current.building[j].type = buildingTypes(type);
             std::cout << "Enter the space of the building:" << std::endl;
             std::cin >> current.building[j].space;
             int furnace = -1;
-            while (type == 3 && (furnace < 0 || furnace > 1)) {
+            while (current.building[j].type == BATH_HOUSE && (furnace < 0 || furnace > 1)) {
                 std::cin.clear();
                 std::cout << "Have a furnace?(1/0)" << std::endl;
                 std::cin >> furnace;
