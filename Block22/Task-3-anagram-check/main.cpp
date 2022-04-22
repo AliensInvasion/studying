@@ -4,42 +4,21 @@
 
 bool check(std::string &str1, std::string &str2) {
 
-    std::map<char, int> first, second;
+    std::map<char, int> anagram;
 
     for (char &i : str1) {
-        auto it = first.find(i);
-        if (it == first.end()) {
-            first.insert(std::make_pair(i, 1));
-        }
-        else {
-            it->second++;
-        }
+        anagram[i]++;
     }
 
     for (char &i : str2) {
-        auto it = second.find(i);
-        if (it == second.end()) {
-            second.insert(std::make_pair(i, 1));
-        }
-        else {
-            it->second++;
-        }
-    }
-
-    auto it1 = first.begin();
-    auto it2 = second.begin();
-
-    while (it1 != first.end() && it2 != second.end()) {
-        if (it1->first != it2->first || it1->second != it2->second) {
+        anagram[i]--;
+        if(anagram[i] < 0)
             return false;
-        }
-        it1++;
-        it2++;
+        if(anagram[i] == 0)
+            anagram.erase(i);
     }
 
-    if (it1 == first.end() && it2 == second.end()) return true;
-    else return false;
-
+    return  anagram.empty();
 }
 
 int main() {
