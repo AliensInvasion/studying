@@ -42,23 +42,18 @@ bool check(std::string &str, std::map<std::string, std::string> &numbersNames,
     if (pos < 0) return false;
 
     if (str[pos] < '0' || str[pos] > '9') { //not number
-
         if (str[pos] >= 'a' && str[pos] <= 'z') str[pos] -= 32;
         if (str[pos] < 'A' || str[pos] > 'Z') return false; //not name
-
         else { //name
-
             for (int i = pos; i < str.length(); ++i) {
                 if (str[i] == ' ') break;
                 first += str[i];
                 ++pos;
             }
-
             if (!checkName(first)) {
                 std::cout << "name is not correct" << std::endl;
                 return false;
             }
-
             if (!namesNumbers[first].empty()) {
                 std::cout << "Name: " << first << std::endl;
                 std::cout << "Number: ";
@@ -84,7 +79,6 @@ bool check(std::string &str, std::map<std::string, std::string> &numbersNames,
         pos = next(str, pos);
 
         if (pos > 0) { //number, name
-
             for (int i = pos; i < str.length(); ++i) {
                 if (str[i] == ' ') break;
                 second += str[i];
@@ -93,16 +87,13 @@ bool check(std::string &str, std::map<std::string, std::string> &numbersNames,
                 std::cout << "name is not correct" << std::endl;
                 return false;
             }
-
             if (numbersNames[first].empty()) {
                 numbersNames[first] = second;
             } else {
                 std::cout << "Number already exists." << std::endl;
                 return false;
             }
-
             namesNumbers[second].push_back(first);
-
         }
         else { //number
             if (!numbersNames[first].empty()) {
