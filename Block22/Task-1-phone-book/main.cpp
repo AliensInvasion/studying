@@ -45,6 +45,7 @@ bool check(std::string &str, std::map<std::string, std::string> &numbersNames,
 
         if (str[pos] >= 'a' && str[pos] <= 'z') str[pos] -= 32;
         if (str[pos] < 'A' || str[pos] > 'Z') return false; //not name
+
         else { //name
 
             for (int i = pos; i < str.length(); ++i) {
@@ -58,17 +59,14 @@ bool check(std::string &str, std::map<std::string, std::string> &numbersNames,
                 return false;
             }
 
-            for (auto &it : namesNumbers) {
-                if (it.first == first) {
-                    std::cout << "Name: " << it.first << std::endl;
-                    std::cout << "Number: ";
-                    for (auto &i : it.second) {
-                       std::cout << i << " ";
-                    }
-                    std::cout << std::endl;
+            if (!namesNumbers[first].empty()) {
+                std::cout << "Name: " << first << std::endl;
+                std::cout << "Number: ";
+                for (auto &i: namesNumbers[first]) {
+                    std::cout << i << " ";
                 }
+                std::cout << std::endl;
             }
-
         }
     }
 
@@ -83,8 +81,8 @@ bool check(std::string &str, std::map<std::string, std::string> &numbersNames,
             std::cout << "number is not correct" << std::endl;
             return false;
         }
-
         pos = next(str, pos);
+
         if (pos > 0) { //number, name
 
             for (int i = pos; i < str.length(); ++i) {
@@ -96,42 +94,20 @@ bool check(std::string &str, std::map<std::string, std::string> &numbersNames,
                 return false;
             }
 
-            for (auto it= numbersNames.begin(); it != numbersNames.end(); ++it) {
-                if (it->first == first) {
-                    std::cout << "Number already exists." << std::endl;
-                    return false;
-                }
+            if (numbersNames[first].empty()) {
+                numbersNames[first] = second;
+            } else {
+                std::cout << "Number already exists." << std::endl;
+                return false;
             }
 
-            for (auto it = namesNumbers.begin(); ; ++it) {
-                if (it == namesNumbers.end()) {
-                    std::vector<std::string> vec;
-                    vec.push_back(first);
-                    namesNumbers.insert(std::make_pair(second, vec));
-                    break;
-                }
-                if (it->first == second){
-                    bool exist = false;
-                    for (auto & i : it->second) {
-                        if (i == first) {
-                            exist = true;
-                        }
-                    }
-                    if (!exist) {
-                        it->second.push_back(first);
-                    }
-                }
-            }
+            namesNumbers[second].push_back(first);
 
-            numbersNames.insert(std::make_pair(first,second));
         }
         else { //number
-            std::map<std::string, std::string>::iterator it;
-            for (it = numbersNames.begin(); it != numbersNames.end(); ++it) {
-                if (it->first == first) {
-                    std::cout << "Number: " << it->first << std::endl;
-                    std::cout << "Name: " << it->second << std::endl;
-                }
+            if (!numbersNames[first].empty()) {
+                std::cout << "Number: " << first << std::endl;
+                std::cout << "Name: " << numbersNames[first] << std::endl;
             }
         }
     }
