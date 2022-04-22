@@ -31,13 +31,8 @@ int main() {
             if (it->second == 0) registry.erase(it);
             continue;
         }
-        bool hasName = false;
-        for (auto &it : registry) {
-            if (it.first == request)  {
-                hasName = true;
-                it.second++;
-            }
-        }
-        if (!hasName) registry.insert(std::make_pair(request,0));
+
+        registry[request]++;
+
     }
 }
