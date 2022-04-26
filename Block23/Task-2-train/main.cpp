@@ -1,6 +1,33 @@
 #include <iostream>
 #include <map>
 
+#define CALL_FUNCTION(func) for (int i = 0; i < 10; ++i) { func(i, train[i]); }
+#define FILL for (int i = 0; i < 10; ++i) {std::cin >> num; sum += num; train.insert(std::make_pair(i, num));}
+
+void more(int &index, int &count) {
+    if (count > 20) std::cerr << "Car overflow: #" << index+1 << std::endl;
+}
+
+void less(int &index, int &count) {
+    if (count < 20) std::cerr << "Car under filled: #" << index+1 << std::endl;
+}
+
+
+int main() {
+
+    std::map<int, int> train;
+    int num;
+    int sum = 0;
+
+    FILL
+
+    CALL_FUNCTION(more)
+    CALL_FUNCTION(less)
+
+    std::cerr << sum;
+}
+
+/*
 #define FOR for (int i = 0; i < 10; ++i)
 
 #define INSERT train.insert(std::make_pair(i, num));
@@ -39,3 +66,4 @@ int main() {
 
     SUM
 }
+ */
