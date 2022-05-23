@@ -32,7 +32,7 @@ int main() {
 
     std::time_t now = std::time(nullptr);
 
-    int currentSecond;
+    int currentSecond = 0;
 
     while (now != target) {
         now = std::time(nullptr);
