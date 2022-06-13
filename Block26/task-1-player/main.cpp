@@ -5,10 +5,33 @@
 
 class Track
 {
+    int id = 0;
     std::string name;
     std::tm creationDate{};
     int length = 0;
-    friend class Player;
+    //friend class Player;
+
+public:
+
+    Track(int id) {
+        std::time_t now = std::time(nullptr);
+        std::tm nowInfo = *std::localtime(&now);
+        char num = id+49;
+        name = "track_";
+        name += num;
+        creationDate = nowInfo;
+        length = (std::rand() % 180) + 1;
+    }
+
+    std::string getName() {
+        return name;
+    }
+
+    int getLength() {
+        return length;
+    }
+
+
 };
 
 class Player {
@@ -55,14 +78,15 @@ public :
     }
 
     void playTrack(std::string trackName) {
+        if (paused) paused = false;
         for (auto &i : track) {
-            if (i.name == trackName) {
+            if (i.getName() == trackName) {
                 std::time_t now = std::time(nullptr);
                 std::tm nowInfo = *std::localtime(&now);
-                std::cout << "Track name: " << i.name << std::endl;
+                std::cout << "Track name: " << i.getName() << std::endl;
                 std::cout << "Creation date: ";
                 std::cout << std::put_time(&nowInfo, "%y/%m/%d") << std::endl;
-                std::cout << "Length: " << i.length << " seconds";
+                std::cout << "Length: " << i.getLength() << " seconds";
                 std::cout << std::endl;
                 std::cout << "Playing..." << std::endl;
                 playing = true;
@@ -78,27 +102,20 @@ public :
     void nextTrack()
     {
         int nextNum = (std::rand() % track.size());
-        std::string nextName = track[nextNum].name;
+        std::string nextName = track[nextNum].getName();
         playTrack(nextName);
     }
 
     void listTracks() {
         for (auto &i : track) {
-            std::cout << i.name << std::endl;
+            std::cout << i.getName() << std::endl;
         }
     }
 
     void initTracks()
     {
         for (int i = 0; i < 3; ++i) {
-            Track newTrack;
-            std::time_t now = std::time(nullptr);
-            std::tm nowInfo = *std::localtime(&now);
-            char num = i+49;
-            newTrack.name = "track_";
-            newTrack.name += num;
-            newTrack.creationDate = nowInfo;
-            newTrack.length = (std::rand() % 180) + 1;
+            Track newTrack(i);
             track.push_back(newTrack);
         }
     }

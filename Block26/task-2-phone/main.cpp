@@ -14,15 +14,8 @@ public:
         return number;
     }
 
-    bool putNumber() {
-        std::string str;
-        std::cout << "Enter the number: " << std::endl;
-        std::cin >> str;
-        if (CORRECT_NUMBER(str)) {
-            number = str;
-            return true;
-        }
-        return false;
+    void putNumber(std::string &str) {
+        number = str;
     }
 
 };
@@ -32,7 +25,20 @@ class Contact {
     std::string name;
     PhoneNumber number;
 
-    friend class Phone;
+public:
+
+    std::string getName() {
+        return name;
+    }
+
+    std::string getNumber() {
+        return number.getNumber();
+    }
+
+    bool newContact(std::string &str1, std::string &str2) {
+        name = str1;
+        number.putNumber(str2);
+    }
 
 };
 
@@ -50,8 +56,8 @@ public:
             CALL_NUMBER(temp)
         } else {
             for (auto &i : contacts) {
-                if (i.name == temp) {
-                    CALL_NUMBER(i.number.getNumber())
+                if (i.getName() == temp) {
+                    CALL_NUMBER(i.getNumber())
                 }
             }
         }
@@ -64,21 +70,27 @@ public:
             SEND_SMS(temp, temp)
         } else {
             for (auto &i : contacts) {
-                if (i.name == temp) {
-                    SEND_SMS(i.number.getNumber(), temp)
+                if (i.getName() == temp) {
+                    SEND_SMS(i.getNumber(), temp)
                 }
             }
         }
     };
 
-    void add() {
+    bool add() {
         Contact contact;
+        std::string str1;
+        std::string str2;
         std::cout << "Enter the name: " << std::endl;
-        std::cin >> contact.name;
-        while (!contact.number.putNumber()) {
-            std::cout << "Not correct number! Enter again:" << std::endl;
+        std::cin >> str1;
+        std::cout << "Enter the number: " << std::endl;
+        std::cin >> str2;
+        if (CORRECT_NUMBER(str2)) {
+            contact.newContact(str1, str2);
+            contacts.push_back(contact);
+            return true;
         }
-        contacts.push_back(contact);
+        return false;
     }
 };
 
