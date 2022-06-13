@@ -9,7 +9,6 @@ class Track
     std::string name;
     std::tm creationDate{};
     int length = 0;
-    //friend class Player;
 
 public:
 
