@@ -175,5 +175,5 @@ int main()
         haveUnoccupied = head->initiateTask();
     }
     std::cout << "All employees are occupied!" << std::endl;
-
+    delete head;
 }
