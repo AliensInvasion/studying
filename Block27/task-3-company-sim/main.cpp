@@ -16,6 +16,8 @@ class Laborer
 
 public:
 
+    static int count;
+
     int getId()
     {
         return id;
@@ -30,7 +32,7 @@ public:
     {
         currentTask = inTask;
         char temp = ((int)currentTask)+65;
-        std::cout << "\t\tLaborer " << name << " get the task of type " << temp << std::endl;
+        std::cout << "\t\tLaborer " << name << " with ID = " << getId() << " get the task of type " << temp << std::endl;
     }
 
     void setId(int inId)
@@ -66,7 +68,7 @@ public:
 
     bool executeTask(int seed)
     {
-        std::cout << "\nManager " << getName() << " get the task with seed = " << seed << std::endl;
+        std::cout << "\nManager " << getName() << " with ID = " << getId() << " get the task with seed = " << seed << std::endl;
         seed += getId();
         std::srand(seed);
 
@@ -90,20 +92,22 @@ public:
 
     Manager()
     {
+        count++;
         std::cout << "Employee position: manager" << std::endl;
-        int team = 0;
-        setId(std::rand());
+        setId(count);
         setName();
         std::cout << "Enter the number of employees in the team of manager " << getName() << ":" << std::endl;
+        int team = 0;
         std::cin >> team;
         laborersCount = team;
         std::cout << laborersCount << std::endl; //!!
         laborers = new Laborer*[team];
 
         for (int i = 0; i < team; ++i) {
+            count++;
             std::cout << "Employee position: laborer" << std::endl;
             laborers[i] = new Laborer;
-            laborers[i]->setId(std::rand());
+            laborers[i]->setId(count);
             laborers[i]->setName();
         }
 
@@ -122,6 +126,7 @@ public:
     bool initiateTask()
     {
         bool haveUnoccupied = false;
+        std::cout << "Head " << getName() << " with ID = " << getId() << std::endl;
         std::cout << "Have a new task to initiate?" << std::endl;
         std::cout << "Enter the seed of the task:" << std::endl;
         int seed = 0;
@@ -136,8 +141,9 @@ public:
 
     Head()
     {
+        count++;
         std::cout << "Employee position: head" << std::endl;
-        setId(std::rand());
+        setId(count);
         setName();
         std::cout << "Enter the number of teams:" << std::endl;
         int teams = 0;
@@ -150,6 +156,8 @@ public:
     }
 
 };
+
+int Laborer::count = 0;
 
 int main()
 {
