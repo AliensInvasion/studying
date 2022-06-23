@@ -13,14 +13,23 @@ class Laborer
     int id = -1;
     std::string name = "unknown";
     TaskType currentTask = NONE;
+    static int count;
 
 public:
-
-    static int count;
 
     int getId()
     {
         return id;
+    }
+
+    static void countPlus()
+    {
+        ++count;
+    }
+
+    static int getCount()
+    {
+        return count;
     }
 
     std::string getName()
@@ -92,9 +101,9 @@ public:
 
     Manager()
     {
-        count++;
+        countPlus();
         std::cout << "Employee position: manager" << std::endl;
-        setId(count);
+        setId(getCount());
         setName();
         std::cout << "Enter the number of employees in the team of manager " << getName() << ":" << std::endl;
         int team = 0;
@@ -104,15 +113,13 @@ public:
         laborers = new Laborer*[team];
 
         for (int i = 0; i < team; ++i) {
-            count++;
+            countPlus();
             std::cout << "Employee position: laborer" << std::endl;
             laborers[i] = new Laborer;
-            laborers[i]->setId(count);
+            laborers[i]->setId(getCount());
             laborers[i]->setName();
         }
-
     }
-
 };
 
 
@@ -141,9 +148,9 @@ public:
 
     Head()
     {
-        count++;
+        countPlus();
         std::cout << "Employee position: head" << std::endl;
-        setId(count);
+        setId(getCount());
         setName();
         std::cout << "Enter the number of teams:" << std::endl;
         int teams = 0;
@@ -167,7 +174,6 @@ int main()
     while (haveUnoccupied) {
         haveUnoccupied = head->initiateTask();
     }
-
     std::cout << "All employees are occupied!" << std::endl;
 
 }
