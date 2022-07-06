@@ -68,12 +68,36 @@ public:
 
 };
 
+int Laborer::count = 0;
+
 class Manager : Laborer
 {
     int laborersCount = 0;
     Laborer **laborers = nullptr;
 
 public:
+
+    Manager()
+    {
+        countPlus();
+        std::cout << "Employee position: manager" << std::endl;
+        setId(getCount());
+        setName();
+        std::cout << "Enter the number of employees in the team of manager " << getName() << ":" << std::endl;
+        int team = 0;
+        std::cin >> team;
+        laborersCount = team;
+        std::cout << laborersCount << std::endl; //!!
+        laborers = new Laborer*[team];
+
+        for (int i = 0; i < team; ++i) {
+            countPlus();
+            std::cout << "Employee position: laborer" << std::endl;
+            laborers[i] = new Laborer;
+            laborers[i]->setId(getCount());
+            laborers[i]->setName();
+        }
+    }
 
     bool executeTask(int seed)
     {
@@ -98,28 +122,6 @@ public:
         if (count == 0) return false;
         else return true;
     }
-
-    Manager()
-    {
-        countPlus();
-        std::cout << "Employee position: manager" << std::endl;
-        setId(getCount());
-        setName();
-        std::cout << "Enter the number of employees in the team of manager " << getName() << ":" << std::endl;
-        int team = 0;
-        std::cin >> team;
-        laborersCount = team;
-        std::cout << laborersCount << std::endl; //!!
-        laborers = new Laborer*[team];
-
-        for (int i = 0; i < team; ++i) {
-            countPlus();
-            std::cout << "Employee position: laborer" << std::endl;
-            laborers[i] = new Laborer;
-            laborers[i]->setId(getCount());
-            laborers[i]->setName();
-        }
-    }
 };
 
 
@@ -129,22 +131,6 @@ class Head : Laborer
     Manager **managers = nullptr;
 
 public:
-
-    bool initiateTask()
-    {
-        bool haveUnoccupied = false;
-        std::cout << "Head " << getName() << " with ID = " << getId() << std::endl;
-        std::cout << "Have a new task to initiate?" << std::endl;
-        std::cout << "Enter the seed of the task:" << std::endl;
-        int seed = 0;
-        std::cin >> seed;
-        for (int i = 0; i < managersCount; ++i) {
-            if (managers[i]->executeTask(seed) == true) {
-                haveUnoccupied = true;
-            };
-        }
-        return haveUnoccupied;
-    }
 
     Head()
     {
@@ -162,9 +148,22 @@ public:
         }
     }
 
+    bool initiateTask()
+    {
+        bool haveUnoccupied = false;
+        std::cout << "Head " << getName() << " with ID = " << getId() << std::endl;
+        std::cout << "Have a new task to initiate?" << std::endl;
+        std::cout << "Enter the seed of the task:" << std::endl;
+        int seed = 0;
+        std::cin >> seed;
+        for (int i = 0; i < managersCount; ++i) {
+            if (managers[i]->executeTask(seed) == true) {
+                haveUnoccupied = true;
+            };
+        }
+        return haveUnoccupied;
+    }
 };
-
-int Laborer::count = 0;
 
 int main()
 {

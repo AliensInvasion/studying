@@ -16,6 +16,19 @@ class Figure
 
 public:
 
+    Figure()
+    {
+        std::string inColor;
+        color = NONE;
+        std::cout << "Enter center point coords:" << std::endl;
+        std::cin >> x >> y;
+        std::cout << "Enter the color of object:" << std::endl;
+        std::cin >> inColor;
+        if (inColor == "red") color = RED;
+        if (inColor == "blue") color = BLUE;
+        if (inColor == "green") color = GREEN;
+    }
+
     void getCircumscribingRectangle(double first, double second)
     {
         std::cout << "Circumscribing rectangle coords: " << std::endl;
@@ -34,18 +47,6 @@ public:
         return "no color";
     }
 
-    Figure()
-    {
-        std::string inColor;
-        color = NONE;
-        std::cout << "Enter center point coords:" << std::endl;
-        std::cin >> x >> y;
-        std::cout << "Enter the color of object:" << std::endl;
-        std::cin >> inColor;
-        if (inColor == "red") color = RED;
-        if (inColor == "blue") color = BLUE;
-        if (inColor == "green") color = GREEN;
-    }
 };
 
 class Circle : Figure
@@ -53,6 +54,12 @@ class Circle : Figure
     double radius;
 
 public:
+
+    Circle()
+    {
+        std::cout << "Enter the radius of circle:" << std::endl;
+        std::cin >> radius;
+    }
 
     void color()
     {
@@ -69,11 +76,6 @@ public:
         std::cout << "Area of circle = " << atan(1) * 4 * radius << std::endl;
     }
 
-    Circle()
-    {
-        std::cout << "Enter the radius of circle:" << std::endl;
-        std::cin >> radius;
-    }
 };
 
 class Triangle : Figure
@@ -81,6 +83,12 @@ class Triangle : Figure
     double length;
 
 public:
+
+    Triangle()
+    {
+        std::cout << "Enter the side of triangle:" << std::endl;
+        std::cin >> length;
+    }
 
     void color()
     {
@@ -97,11 +105,6 @@ public:
         std::cout << "Area of triangle = " << std::sqrt(3) / 4 << std::endl;
     }
 
-    Triangle()
-    {
-        std::cout << "Enter the side of triangle:" << std::endl;
-        std::cin >> length;
-    }
 };
 
 class Square : Figure
@@ -109,6 +112,12 @@ class Square : Figure
     double length;
 
 public:
+
+    Square()
+    {
+        std::cout << "Enter the side of square:" << std::endl;
+        std::cin >> length;
+    }
 
     void color()
     {
@@ -123,12 +132,6 @@ public:
     double getArea()
     {
         std::cout << "Area of square = " << length * length << std::endl;
-    }
-
-    Square()
-    {
-        std::cout << "Enter the side of square:" << std::endl;
-        std::cin >> length;
     }
 };
 

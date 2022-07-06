@@ -1,7 +1,8 @@
 #include <iostream>
 #include <ctime>
-#define GET_BIG_BRANCH_COUNT (((std::rand() % 3))+3)
-#define GET_MIDDLE_BRANCH_COUNT (((std::rand() % 2))+2)
+#include <cassert>
+#define GET_BIG_BRANCH_COUNT (((std::rand()%3))+3)
+#define GET_MIDDLE_BRANCH_COUNT (((std::rand()%2))+2)
 
 class House {
 
@@ -9,12 +10,14 @@ class House {
 
 public:
 
+    House(std::string inName) : name(inName)
+    {
+    }
+
     std::string getName()
     {
         return name;
     }
-
-    House(std::string inName) : name(inName) {}
 
 };
 
@@ -27,6 +30,10 @@ class Branch {
 
 
 public:
+
+    Branch(Branch *inParent) : parent(inParent)
+    {
+    }
 
     House *getHouse()
     {
@@ -67,7 +74,7 @@ public:
         std::cout << "Enter the name of the elf:" << std::endl;
         std::string name;
         std::cin >> name;
-        /*if (name != "null"){
+/*        if (name != "null"){
             name = "";
             name += (std::rand()%10)+48;
             name += (std::rand()%10)+48;
@@ -78,8 +85,6 @@ public:
         newHouse(name);
     }
 
-    Branch(Branch *inParent) : parent(inParent) {}
-
 };
 
 
@@ -88,6 +93,51 @@ class Forest {
     Branch **trees = nullptr;
 
 public:
+
+    Forest()
+    {
+        trees = new Branch*[5];
+        for (int i = 0; i < 5; ++i) {
+
+            int bigBranches = GET_BIG_BRANCH_COUNT;
+            trees[i] = new Branch(nullptr);
+            auto **treeChildren = new Branch*[bigBranches];
+
+            for (int j = 0; j < bigBranches; ++j) {
+
+                int middleBranches = GET_MIDDLE_BRANCH_COUNT;
+                auto *bigBranch = new Branch(trees[i]);
+                auto **bigBranchChildren = new Branch*[middleBranches];
+
+                for (int k = 0; k < middleBranches; ++k) {
+                    bigBranchChildren[k] = new Branch(bigBranch);
+                }
+
+                bigBranch->setChildren(middleBranches, bigBranchChildren);
+                treeChildren[j] = bigBranch;
+            }
+
+            trees[i]->setChildren(bigBranches, treeChildren);
+        }
+    }
+
+    ~Forest()
+    {
+        for (int i = 0; i < 5; ++i) {
+            assert(trees[i] != nullptr);
+            for (int j = 0; j < (sizeof(trees[i])/sizeof(trees[i][0])); ++j) {
+                for (int k = 0; k < (sizeof(trees[i]->getChildren())/sizeof(trees[i]->getChildren()[0])); ++k) {
+                    if (trees[i]->getChildren()[k]->getHouse() != nullptr) {
+                        delete trees[i]->getChildren()[k]->getHouse();
+                    }
+                    delete trees[i]->getChildren()[k];
+                }
+                delete trees[i]->getChildren();
+            }
+            delete trees[i];
+        }
+        delete trees;
+    }
 
     int countNeighbours(Branch *branch)
     {
@@ -108,7 +158,6 @@ public:
             }
             return count-1;
         }
-
         return -1;
     }
 
@@ -131,11 +180,8 @@ public:
                     //std::cout << "\t\tfor k:" << k << std::endl;
                     if (midBranches[k]->getHouse()->getName() == name) return midBranches[k];
                 }
-
             }
-
         }
-
         return nullptr;
     }
 
@@ -161,6 +207,7 @@ public:
     void show()
     {
         for (int i = 0; i < 5; ++i) {
+            assert(trees[i] != nullptr);
             std::cout << trees[i] << std::endl;
             Branch **treeChildren = trees[i]->getChildren();
             for (int j = 0; j < trees[i]->getChildrenSize(); ++j) {
@@ -170,34 +217,6 @@ public:
                     std::cout << "\t\t" << bigBranchChildren[k] << std::endl;
                 }
             }
-        }
-    }
-
-    Forest()
-    {
-        trees = new Branch*[5];
-        for (int i = 0; i < 5; ++i) {
-
-            int bigBranches = GET_BIG_BRANCH_COUNT;
-            trees[i] = new Branch(nullptr);
-            auto **treeChildren = new Branch*[bigBranches];
-
-            for (int j = 0; j < bigBranches; ++j) {
-
-                int middleBranches = GET_MIDDLE_BRANCH_COUNT;
-                auto *bigBranch = new Branch(trees[i]);
-                auto **bigBranchChildren = new Branch*[middleBranches];
-
-                for (int k = 0; k < middleBranches; ++k) {
-                    auto *midBranch = new Branch(bigBranch);
-                    bigBranchChildren[k] = midBranch;
-                }
-
-                bigBranch->setChildren(middleBranches, bigBranchChildren);
-                treeChildren[j] = bigBranch;
-            }
-
-            trees[i]->setChildren(bigBranches, treeChildren);
         }
     }
 };
@@ -211,7 +230,7 @@ int main() {
     forest->show();
     forest->settleElves();
 
-    Branch *elfHouseBranch = nullptr;
+    Branch *elfHouseBranch;
 
     do {
         elfHouseBranch = forest->findElf();
@@ -221,6 +240,4 @@ int main() {
     std::cout << "Has " << forest->countNeighbours(elfHouseBranch) << " neighbours." << std::endl;
 
     delete forest;
-    forest = nullptr;
-
 }
