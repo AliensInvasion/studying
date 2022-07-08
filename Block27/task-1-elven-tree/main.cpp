@@ -28,7 +28,6 @@ class Branch {
     Branch **children = nullptr;
     int childrenSize = 0;
 
-
 public:
 
     Branch(Branch *inParent) : parent(inParent)
@@ -84,7 +83,6 @@ public:
         std::cout << name << std::endl;
         newHouse(name);
     }
-
 };
 
 
@@ -125,18 +123,25 @@ public:
     {
         for (int i = 0; i < 5; ++i) {
             assert(trees[i] != nullptr);
-            for (int j = 0; j < (sizeof(trees[i])/sizeof(trees[i][0])); ++j) {
-                for (int k = 0; k < (sizeof(trees[i]->getChildren())/sizeof(trees[i]->getChildren()[0])); ++k) {
-                    if (trees[i]->getChildren()[k]->getHouse() != nullptr) {
-                        delete trees[i]->getChildren()[k]->getHouse();
+            size_t treeChildrenSize = sizeof(trees[i]->getChildren())/sizeof(trees[i]->getChildren()[0]);
+            for (size_t j = 0; j < treeChildrenSize; ++j) {
+                size_t bigBranchChildrenSize = sizeof(trees[i]->getChildren()[j]->getChildren())/sizeof(trees[i]->getChildren()[j]->getChildren()[0]);
+                for (size_t k = 0; k < bigBranchChildrenSize; ++k) {
+                    if (trees[i]->getChildren()[j]->getChildren()[k]->getHouse() != nullptr) {
+                        delete trees[i]->getChildren()[j]->getChildren()[k]->getHouse();
                     }
-                    delete trees[i]->getChildren()[k];
+                    delete trees[i]->getChildren()[j]->getChildren()[k];
                 }
-                delete trees[i]->getChildren();
+                if (trees[i]->getChildren()[j]->getHouse() != nullptr) {
+                    delete trees[i]->getChildren()[j]->getHouse();
+                }
+                delete[] trees[i]->getChildren()[j]->getChildren();
+                delete trees[i]->getChildren()[j];
             }
+            delete[] trees[i]->getChildren();
             delete trees[i];
         }
-        delete trees;
+        delete[] trees;
     }
 
     int countNeighbours(Branch *branch)

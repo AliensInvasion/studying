@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 enum TaskType
 {
@@ -99,6 +100,17 @@ public:
         }
     }
 
+    ~Manager()
+    {
+        assert(laborers != nullptr);
+        size_t managersSize = sizeof(laborers)/sizeof(laborers[0]);
+        for (size_t i = 0; i < managersSize; ++i) {
+            if (laborers[i] != nullptr)
+                delete laborers[i];
+        }
+        delete[] laborers;
+    }
+
     bool executeTask(int seed)
     {
         std::cout << "\nManager " << getName() << " with ID = " << getId() << " get the task with seed = " << seed << std::endl;
@@ -148,6 +160,17 @@ public:
         }
     }
 
+    ~Head()
+    {
+        assert(managers != nullptr);
+        size_t managersSize = sizeof(managers)/sizeof(managers[0]);
+        for (size_t i = 0; i < managersSize; ++i) {
+            if (managers[i] != nullptr)
+                delete managers[i];
+        }
+        delete[] managers;
+    }
+
     bool initiateTask()
     {
         bool haveUnoccupied = false;
@@ -157,7 +180,7 @@ public:
         int seed = 0;
         std::cin >> seed;
         for (int i = 0; i < managersCount; ++i) {
-            if (managers[i]->executeTask(seed) == true) {
+            if (managers[i]->executeTask(seed)) {
                 haveUnoccupied = true;
             };
         }

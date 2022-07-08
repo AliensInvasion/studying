@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <map>
 
 enum Color
 {
@@ -9,6 +10,14 @@ enum Color
     GREEN
 };
 
+std::map<Color, std::string> colorDict
+{
+        {NONE,  "no color"},
+        {RED,   "red"},
+        {GREEN, "green"},
+        {BLUE,  "blue"},
+};
+
 class Figure
 {
     double x, y;
@@ -16,18 +25,7 @@ class Figure
 
 public:
 
-    Figure()
-    {
-        std::string inColor;
-        color = NONE;
-        std::cout << "Enter center point coords:" << std::endl;
-        std::cin >> x >> y;
-        std::cout << "Enter the color of object:" << std::endl;
-        std::cin >> inColor;
-        if (inColor == "red") color = RED;
-        if (inColor == "blue") color = BLUE;
-        if (inColor == "green") color = GREEN;
-    }
+    Figure(double &inX, double &inY, Color &inColor) : x(inX), y(inY), color(inColor){}
 
     void getCircumscribingRectangle(double first, double second)
     {
@@ -39,12 +37,9 @@ public:
         std::cout << std::endl;
     }
 
-    std::string getColor()
+    std::string getColor() const
     {
-        if (color == RED) return "red";
-        if (color == BLUE) return "blue";
-        if (color == GREEN) return "green";
-        return "no color";
+        return colorDict.at(color);
     }
 
 };
@@ -55,11 +50,8 @@ class Circle : Figure
 
 public:
 
-    Circle()
-    {
-        std::cout << "Enter the radius of circle:" << std::endl;
-        std::cin >> radius;
-    }
+    Circle(double &inX, double &inY, Color &inColor, double &inRadius) :
+            Figure(inX, inY, inColor), radius(inRadius) {}
 
     void color()
     {
@@ -84,11 +76,8 @@ class Triangle : Figure
 
 public:
 
-    Triangle()
-    {
-        std::cout << "Enter the side of triangle:" << std::endl;
-        std::cin >> length;
-    }
+    Triangle(double &inX, double &inY, Color &inColor, double &inLength) :
+            Figure(inX, inY, inColor), length(inLength) {}
 
     void color()
     {
@@ -113,11 +102,8 @@ class Square : Figure
 
 public:
 
-    Square()
-    {
-        std::cout << "Enter the side of square:" << std::endl;
-        std::cin >> length;
-    }
+    Square(double &inX, double &inY, Color &inColor, double &inLength) :
+            Figure(inX, inY, inColor), length(inLength) {}
 
     void color()
     {
@@ -141,6 +127,9 @@ class Rectangle : Figure
 
 public:
 
+    Rectangle(double &inX, double &inY, Color &inColor, double &inWidth, double &inHeight) :
+            Figure(inX, inY, inColor), width(inWidth), height(inHeight) {}
+
     void color()
     {
         std::cout << "Color is: " << getColor() << std::endl;
@@ -155,12 +144,6 @@ public:
     {
         std::cout << "Area of rectangle = " << width * height << std::endl;
     }
-
-    Rectangle()
-    {
-        std::cout << "Enter the width and height of rectangle:" << std::endl;
-        std::cin >> width >> height;
-    }
 };
 
 int main(){
@@ -168,29 +151,57 @@ int main(){
     do {
         std::cout << "Enter request:" << std::endl;
         std::cin >> request;
+
+        Color color = NONE;
+        double x, y;
+
+        if (request == "circle" || request == "square" || request == "triangle" || request == "rectangle")
+        {
+            std::string inColor;
+            std::cout << "Enter center point coords:" << std::endl;
+            std::cin >> x >> y;
+            std::cout << "Enter the color of object:" << std::endl;
+            std::cin >> inColor;
+            if (inColor == "red") color = RED;
+            if (inColor == "blue") color = BLUE;
+            if (inColor == "green") color = GREEN;
+        }
+
         if (request == "circle") {
-            Circle *circle = new Circle();
+            std::cout << "Enter the radius of circle:" << std::endl;
+            double radius;
+            std::cin >> radius;
+            auto *circle = new Circle(x, y, color, radius);
             circle->color();
             circle->getArea();
             circle->circumscribingRectangle();
             delete circle;
         }
         if (request == "square") {
-            Square *square = new Square();
+            std::cout << "Enter the side of square:" << std::endl;
+            double length;
+            std::cin >> length;
+            auto *square = new Square(x, y, color, length);
             square->color();
             square->getArea();
             square->circumscribingRectangle();
             delete square;
         }
         if (request == "triangle") {
-            Triangle *triangle = new Triangle();
+            std::cout << "Enter the side of triangle:" << std::endl;
+            double length;
+            std::cin >> length;
+            auto *triangle = new Triangle(x, y, color, length);
             triangle->color();
             triangle->getArea();
             triangle->circumscribingRectangle();
             delete triangle;
         }
         if (request == "rectangle") {
-            Rectangle *rectangle = new Rectangle();
+            std::cout << "Enter the width and height of rectangle:" << std::endl;
+            double width, height;
+            std::cin >> width >> height;
+            auto *rectangle = new Rectangle(x, y, color, width, height);
             rectangle->color();
             rectangle->getArea();
             rectangle->circumscribingRectangle();
