@@ -1,8 +1,9 @@
 #include <iostream>
 #include <thread>
-#include <functional>
 #include <vector>
-#include <map>
+#include <mutex>
+
+std::mutex mutex;
 
 class Swimmer
 {
@@ -11,29 +12,26 @@ class Swimmer
     double distance{0};
     int finalTime{0};
 
+    static std::vector<std::pair<int, std::string>> results;
+
 public:
+
+    static void getResults();
 
     void swim()
     {
         while (distance < 100) {
-
             distance+=speed;
             finalTime+=1;
             std::this_thread::sleep_for(std::chrono::seconds(1));
             std::cout << "Swimmer " << name << ": " << distance << "m";
             std::cout << std::endl;
-
         }
-    }
 
-    int getFinalTime()
-    {
-        return finalTime;
-    }
+        mutex.lock();
+        results.emplace_back(finalTime, name);
+        mutex.unlock();
 
-    std::string getName()
-    {
-        return name;
     }
 
     void setName()
@@ -50,6 +48,16 @@ public:
 
 };
 
+std::vector<std::pair<int, std::string>> Swimmer::results{};
+void Swimmer::getResults()
+{
+    std::cout << "--------------\nFinal scores: " << std::endl;
+    std::cout << "--------------\n" << "Name: " << "\t\tResult(seconds):" << std::endl;
+    for (auto & result : results) {
+        std::cout << result.second << "\t\t" << result.first << std::endl;
+    }
+    std::cout << "--------------" << std::endl;
+}
 
 int main()
 {
@@ -63,8 +71,7 @@ int main()
     std::thread threads[6];
 
     for (int i = 0; i < 6; ++i) {
-        std::function<void()> function = ([&swimmers, &i](){swimmers[i].swim();});
-        threads[i] = std::thread(function);
+        threads[i] = std::thread([&swimmers, &i](){swimmers[i].swim();});
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
 
@@ -72,29 +79,6 @@ int main()
         thread.join();
     }
 
-    std::map<int, std::vector<std::string>> results;
-
-    for (auto &swimmer : swimmers) {
-        int finalTime = swimmer.getFinalTime();
-        auto it = results.find(finalTime);
-
-        if (it == results.end()) {
-            std::vector<std::string> names;
-            names.push_back(swimmer.getName());
-            std::pair<int, std::vector<std::string>> pair = std::make_pair(finalTime, names);
-            results.insert(pair);
-        } else {
-            results[finalTime].push_back(swimmer.getName());
-        }
-    }
-
-    std::cout << "--------------\nFinal scores: " << std::endl;
-    std::cout << "--------------\n" << "Name: " << "\tResult(seconds):" << std::endl;
-    for (auto &result : results) {
-        for (int i = 0; i < result.second.size(); ++i) {
-            std::cout << result.second[i] << "\t" << result.first << std::endl;
-        }
-    }
-    std::cout << "--------------" << std::endl;
+    Swimmer::getResults();
     
 }

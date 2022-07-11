@@ -1,6 +1,5 @@
 #include <iostream>
 #include <thread>
-#include <functional>
 #include <mutex>
 
 std::mutex stationLock;
@@ -14,8 +13,16 @@ public:
 
     Train(char inName) : name(inName)
     {
-        std::cout << "Enter arrival time of train " << name << ":" << std::endl;
-        std::cin >> arrivalTime;
+    }
+
+    char getName()
+    {
+        return name;
+    }
+
+    void setArrivalTime(int time)
+    {
+        arrivalTime = time;
     }
 
     void run()
@@ -40,16 +47,21 @@ public:
 int main()
 {
     Train trains[3]{'A','B','C'};
+    for (auto& train : trains) {
+        std::cout << "Set arrival time for train " << train.getName() << ":" << std::endl;
+        int time;
+        std::cin >> time;
+        train.setArrivalTime(time);
+    }
     std::thread threads[3];
 
     for (int i = 0; i < 3; ++i) {
-        std::function<void()> function = ([&trains, &i](){trains[i].run();});
-        threads[i] = std::thread(function);
+        threads[i] = std::thread([&trains, &i](){trains[i].run();});
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
 
-    for (int i = 0; i < 3; ++i) {
-        threads[i].join();
+    for (auto & thread : threads) {
+        thread.join();
     }
 
 }

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <thread>
-#include <functional>
 #include <map>
 #include <vector>
 #include <ctime>
@@ -40,6 +39,7 @@ void showDish(Dishes &dish)
 class Restaurant
 {
     int delivers{0};
+    bool isOpen{true};
     std::vector<Dishes> dishesToDeliver{};
     std::vector<Dishes> orderedDishes{};
 
@@ -47,7 +47,7 @@ public:
 
     void getToDelivery()
     {
-        while (delivers < 10) {
+        while (true) {
             mutex.lock();
             if (dishesToDeliver.empty()) {
                 mutex.unlock();
@@ -58,7 +58,12 @@ public:
                 showDish(i);
             ++delivers;
             dishesToDeliver.clear();
-            if (delivers == 10) std::cout << "---\nEnd of the day!" << std::endl;
+            if (delivers > 9) {
+                isOpen = false;
+                std::cout << "---\nEnd of the day!" << std::endl;
+                mutex.unlock();
+                break;
+            }
             mutex.unlock();
             std::this_thread::sleep_for(std::chrono::seconds(DELIVERY_TIME));
         }
@@ -67,7 +72,13 @@ public:
 
     void takeOrder()
     {
-        while (delivers < 10) {
+        while (true) {
+            mutex.lock();
+            if (!isOpen) {
+                mutex.unlock();
+                break;
+            }
+            mutex.unlock();
             std::this_thread::sleep_for(std::chrono::seconds(ORDER_TIME));
             Dishes order = DISH_TYPE;
             std::cout << "---\nOrder taken. Dish:" << std::endl;
@@ -81,8 +92,12 @@ public:
 
     void makeDish()
     {
-        while (delivers < 10) {
+        while (true) {
             mutex.lock();
+            if (!isOpen) {
+                mutex.unlock();
+                break;
+            }
             if (orderedDishes.empty()) {
                 mutex.unlock();
                 continue;
@@ -111,12 +126,9 @@ int main()
 
     auto *restaurant = new Restaurant();
 
-    std::function<void()> kitchen = ([&restaurant](){restaurant->makeDish();});
-    std::function<void()> courier = ([&restaurant](){restaurant->getToDelivery();});
-    std::function<void()> makingOrders = ([&restaurant](){restaurant->takeOrder();});
-    std::thread kitchenThread(kitchen);
-    std::thread courierThread(courier);
-    std::thread makingOrdersThread(makingOrders);
+    std::thread kitchenThread([&restaurant](){restaurant->makeDish();});
+    std::thread courierThread([&restaurant](){restaurant->getToDelivery();});
+    std::thread makingOrdersThread([&restaurant](){restaurant->takeOrder();});
 
     courierThread.join();
     kitchenThread.join();
