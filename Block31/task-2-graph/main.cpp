@@ -48,9 +48,9 @@ public:
         }
     }
     virtual ~ListGraph() override {}
-    IGraph* operator=(IGraph *other)
+    std::unique_ptr<IGraph> operator=(IGraph *other)
     {
-        return new ListGraph(other);
+        return std::make_unique<ListGraph>(other);
     }
     virtual void AddEdge(int from, int to) override
     {
@@ -140,9 +140,9 @@ public:
         }
     }
     virtual ~MatrixGraph() override {}
-    IGraph* operator=(IGraph *other)
+    std::unique_ptr<IGraph> operator=(IGraph *other)
     {
-        return new MatrixGraph(other);
+        return std::make_unique<MatrixGraph>(other);
     }
     virtual void AddEdge(int from, int to) override
     {
