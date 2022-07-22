@@ -18,6 +18,11 @@ public:
 
     PtrCounter(Toy* inToyPtr) : toyPtr(inToyPtr){}
 
+    Toy* getToyPtr()
+    {
+        return toyPtr;
+    }
+
     void operator++()
     {
         ++count;
@@ -59,6 +64,8 @@ public:
     {
         if (ptrCounter == nullptr) return;
         --*ptrCounter;
+        if (ptrCounter->getToyPtr() == nullptr)
+            delete ptrCounter;
         ptrCounter = nullptr;
     }
 
