@@ -16,7 +16,16 @@ public:
 
     PtrCounter() = default;
 
-    PtrCounter(Toy* inToyPtr) : toyPtr(inToyPtr){}
+    PtrCounter(std::string inName)
+    {
+        toyPtr = new Toy(std::move(inName));
+    }
+    ~PtrCounter()
+    {
+        if (toyPtr != nullptr)
+            delete toyPtr;
+        toyPtr = nullptr;
+    }
 
     Toy* getToyPtr()
     {
@@ -33,11 +42,11 @@ public:
             --count;
         if (count < 1)
         {
-            delete toyPtr;
+            if (toyPtr != nullptr)
+                delete toyPtr;
             toyPtr = nullptr;
         }
     }
-
 };
 
 class shared_ptr_toy
@@ -48,14 +57,12 @@ public:
 
     shared_ptr_toy(std::string name = "unnamed")
     {
-        Toy* toyPtr = new Toy(std::move(name));
-        ptrCounter = new PtrCounter(toyPtr);
+        ptrCounter = new PtrCounter(std::move(name));
         ++*ptrCounter;
     }
 
     shared_ptr_toy(const shared_ptr_toy& other)
     {
-        ptrCounter = new PtrCounter;
         ptrCounter = other.ptrCounter;
         ++*ptrCounter;
     }
